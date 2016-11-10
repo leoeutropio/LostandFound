@@ -2,11 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content_menu"
+    android:id="@+id/content_principal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_menu">
+    tools:context="br.ufrn.stronda.newlostandfound.PrincipalActivity"
+    tools:showIn="@layout/app_bar_principal"
+    android:background="@color/colorbg">
 
     <ImageButton
         android:layout_width="90dp"
@@ -36,7 +38,5 @@
         android:layout_marginLeft="220dp"
         android:onClick="listagem"
         />
-
-
 
 </RelativeLayout>

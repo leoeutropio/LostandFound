@@ -26,6 +26,7 @@
         <item>SETOR 4</item>
         <item>SETOR 5</item>
     </string-array>
+    <string name="title_activity_principal">PrincipalActivity</string>
 
 
 </resources>
