@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_menu">
+
+    <ImageButton
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:id="@+id/achei"
+        android:background="@drawable/botaoachei"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="250dp"
+        android:onClick="achei"/>
+
+    <ImageButton
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:id="@+id/perdiBtn"
+        android:background="@drawable/botaoperdi"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="115dp"
+        android:onClick="perdi"
+        />
+
+    <ImageButton
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:id="@+id/listagemBtn"
+        android:layout_marginTop="250dp"
+        android:background="@drawable/list"
+        android:layout_marginLeft="220dp"
+        android:onClick="listagem"
+        />
+
+
+
+</RelativeLayout>

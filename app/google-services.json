@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "342527377265",
+    "firebase_url": "https://lost-and-found-481c4.firebaseio.com",
+    "project_id": "lost-and-found-481c4",
+    "storage_bucket": "lost-and-found-481c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342527377265:android:004d98cd66c8b0b1",
+        "android_client_info": {
+          "package_name": "br.ufrn.stronda.newlostandfound"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342527377265-3seh8cfiu2vgaa09kg19o1htg6ftvb2c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
