@@ -7,50 +7,25 @@
     tools:context="br.ufrn.stronda.newlostandfound.MainActivity"
     android:background="@color/colorbg">
 
-
         <Button
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login"
             android:id="@+id/loginBtn"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="300dp"
+            android:layout_marginTop="250dp"
             android:background="@drawable/circlebtn"
             android:onClick="login"
             android:textColor="@color/textcolor"
-
             />
-        <Button
-            android:layout_width="200dp"
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Cadastre-se"
-            android:textColor="@color/textcolor"
-            android:id="@+id/cadastroBtn"
-            android:background="@drawable/circlebtn"
+            android:layout_marginTop="300dp"
             android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="12dp"
-            android:onClick="cadastro"
             />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:textColorHint="@android:color/black"
-            android:id="@+id/emailTxt"
-            android:layout_alignBottom="@+id/passwordTxt"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="45dp" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Password"
-            android:textColorHint="@android:color/black"
-            android:id="@+id/passwordTxt"
-            android:layout_marginTop="250dp" />
 
         <ImageView
             android:layout_width="150dp"

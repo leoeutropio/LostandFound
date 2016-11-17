@@ -1,9 +1,14 @@
 package br.ufrn.stronda.newlostandfound;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,14 +18,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.vision.text.Text;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+        CircleImageView foto;
+        TextView nome;
+        private FirebaseAuth.AuthStateListener mAuthListener;
+    Bitmap bmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+
+
+
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -34,6 +60,15 @@ public class PrincipalActivity extends AppCompatActivity
             }
         });
 
+        FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 FirebaseAuth.getInstance().signOut();
+                finish();
+            }
+        });
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -42,7 +77,32 @@ public class PrincipalActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
+        View header = navigationView.getHeaderView(0);
+        nome = (TextView)header.findViewById(R.id.nameProfile);
+        foto = (CircleImageView) header.findViewById(R.id.profile_image);
+
+
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                    // User is signed in
+                    Log.d("google", "onAuthStateChanged:signed_in:" + user.getUid());
+                    String name = user.getDisplayName();
+                    String email = user.getEmail();
+                    Uri photoUrl = user.getPhotoUrl();
+                    nome.setText(name);
+                Glide.with(this)
+                        .load(photoUrl)
+                        .into(foto);
+            }
+            else {
+                    // User is signed out
+                    Log.d("google", "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+
+
 
     @Override
     public void onBackPressed() {
@@ -92,8 +152,11 @@ public class PrincipalActivity extends AppCompatActivity
         } else if (id == R.id.nav_sobre) {
             Intent intent = new Intent(this,SobreActivity.class);
             startActivity(intent);
+        }
+        else if (id == R.id.nav_sair) {
 
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

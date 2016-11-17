@@ -21,78 +21,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mapA,mapP;
-    TabHost tabHost;
-    TabHost.TabSpec abas1,abas2;
+    private GoogleMap maps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        tabHost=(TabHost) findViewById(R.id.tabHostMaps);
-        tabHost.setup();
-
-        abas1 = tabHost.newTabSpec("Achados");
-        abas1.setContent(R.id.map);
-        abas1.setIndicator("Achados");
-        tabHost.addTab(abas1);
-
-        abas2 = tabHost.newTabSpec("Perdidos");
-        abas2.setContent(R.id.maps);
-        abas2.setIndicator("Perdidos");
-        tabHost.addTab(abas2);
-
-        for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-            tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#270A2B")); // unselected
-            TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
-            tv.setTextColor(Color.parseColor("#9c7b00"));
-            tv.setTextSize(15);
-        }
-
-        tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#C0C0C0")); // selected
-        TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
-        tv.setTextColor(Color.parseColor("#9c7b00"));
-        tv.setTextSize(15);
-
-
-
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
-
-            @Override
-            public void onTabChanged(String tabId) {
-
-                for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-                    tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#270A2B")); // unselected
-                    TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
-                    tv.setTextColor(Color.parseColor("#9c7b00"));
-                    tv.setTextSize(15);
-
-                }
-
-                tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#C0C0C0")); // selected
-                TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
-                tv.setTextColor(Color.parseColor("#9c7b00"));
-                tv.setTextSize(15);
-
-                setMaps1();
-                setMaps2();
-
-
-            }
-        });
-
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragmentA = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        SupportMapFragment mapFragmentP = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.maps);
         mapFragmentA.getMapAsync(this);
-        mapFragmentP.getMapAsync(this);
 
     }
-
 
     /**
      * Manipulates the map once available.
@@ -104,42 +45,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * installed Google Play services and returned to the app.
      */
 
-    private void mapaAchados(){
-        // Add a marker in UFRN and move the camera
-
-        mapA.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        LatLng reitoria = new LatLng(-5.8396243,-35.2020049);
-        mapA.addMarker(new MarkerOptions().position(reitoria).title("Reitoria").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mapA.moveCamera(CameraUpdateFactory.newLatLngZoom(reitoria, 16) );
-    }
-
-    private void mapaPerdidos(){
-        // Add a marker in UFRN and move the camera
-
-        mapA.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        LatLng reitoria = new LatLng(-5.8396243,-35.2020049);
-        mapA.addMarker(new MarkerOptions().position(reitoria).title("Reitoria").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        mapA.moveCamera(CameraUpdateFactory.newLatLngZoom(reitoria , 16) );
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mapA = googleMap;
-        setMaps1();
-        setMaps2();
+        maps = googleMap;
+        maps.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        LatLng reitoria = new LatLng(-5.8396243,-35.2020049);
+        maps.addMarker(new MarkerOptions().position(reitoria).title("Reitoria").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+        maps.moveCamera(CameraUpdateFactory.newLatLngZoom(reitoria, 14));
     }
-
-    private void setMaps2() {
-        if(tabHost.getCurrentTab() == 1){
-            mapaPerdidos();
-        }
-    }
-
-    private void setMaps1() {
-        if(tabHost.getCurrentTab() == 0){
-            mapaAchados();
-        }
-    }
-
 
 }

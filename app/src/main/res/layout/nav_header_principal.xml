@@ -27,7 +27,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:layout_marginLeft="15dp"
         android:textSize="20dp"
-        android:id="@+id/userTxt"
+        android:id="@+id/nameProfile"
         android:textColor="@color/textcolor"/>
 
 </LinearLayout>
