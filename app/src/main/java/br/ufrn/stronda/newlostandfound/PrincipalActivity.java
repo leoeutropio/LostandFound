@@ -35,8 +35,6 @@ public class PrincipalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
         CircleImageView foto;
         TextView nome;
-        private FirebaseAuth.AuthStateListener mAuthListener;
-    Bitmap bmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +75,7 @@ public class PrincipalActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
         View header = navigationView.getHeaderView(0);
         nome = (TextView)header.findViewById(R.id.nameProfile);
         foto = (CircleImageView) header.findViewById(R.id.profile_image);
@@ -153,10 +152,6 @@ public class PrincipalActivity extends AppCompatActivity
             Intent intent = new Intent(this,SobreActivity.class);
             startActivity(intent);
         }
-        else if (id == R.id.nav_sair) {
-
-        }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

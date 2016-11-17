@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -19,12 +20,20 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PerdiActivity extends AppCompatActivity {
     Spinner pcatspn,plocspn;
     EditText descricao;
     Button confirmar;
+
+    private DatabaseReference mDatabase;
+
     public static final int IMAGEM_INTERNA = 12;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,19 +54,33 @@ public class PerdiActivity extends AppCompatActivity {
         adapterloca.setDropDownViewResource(R.layout.spinner_dropdown_item);
         plocspn.setAdapter(adapterloca);
 
-        confirmar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences prefs = getSharedPreferences("objetosP", Context.MODE_PRIVATE);
-                SharedPreferences.Editor ed = prefs.edit();
-                ed.putString("perdidescricao",descricao.getText().toString());
-                ed.putString("perdicategoriaspn", pcatspn.getSelectedItem().toString());
-                ed.putString("perdilocalizacaospn", plocspn.getSelectedItem().toString());
-                ed.apply();
-                Toast.makeText(getBaseContext(),"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // User is signed in
+            Log.d("google", "onAuthStateChanged:signed_in:" + user.getUid());
+            final String name = user.getDisplayName();
+            final String email = user.getEmail();
+            final String userid = user.getUid();
+
+            confirmar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mDatabase.child("Usuários").child(userid).child("nome").setValue(name);
+                    mDatabase.child("Usuários").child(userid).child("email").setValue(email);
+                    novoObjeto(descricao.getText().toString(),pcatspn.getSelectedItem().toString() ,plocspn.getSelectedItem().toString(),userid);
+                    Toast.makeText(getBaseContext(),"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+
+
+        }
+        else {
+            // User is signed out
+            Log.d("google", "onAuthStateChanged:signed_out");
+        }
 
     }
 
@@ -113,5 +136,10 @@ public class PerdiActivity extends AppCompatActivity {
 
     public void cancelar(View view) {
     this.finish();
+    }
+
+    private void novoObjeto(String descricao, String categoria,String localizacao,String userId) {
+        PerdiObjeto perdiObjeto = new PerdiObjeto(descricao,categoria,localizacao);
+        mDatabase.child("Usuários").child(userId).child("Objetos").child("Perdidos").setValue(perdiObjeto);
     }
 }

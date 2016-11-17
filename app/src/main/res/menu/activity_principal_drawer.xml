@@ -19,10 +19,6 @@
             android:id="@+id/nav_sobre"
             android:icon="@drawable/information"
             android:title="Sobre" />
-        <item
-            android:id="@+id/nav_sair"
-            android:icon="@drawable/mr_ic_close_light"
-            android:title="Sair" />
 
     </group>
 
