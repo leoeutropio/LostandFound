@@ -3,6 +3,8 @@ package br.ufrn.stronda.newlostandfound;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+//APENAS UMA ACTIVITY PRA EXIBIR INFORMAÇÕES DOS CRIADORES DO APLICATIVO
+
 public class SobreActivity extends AppCompatActivity {
 
     @Override

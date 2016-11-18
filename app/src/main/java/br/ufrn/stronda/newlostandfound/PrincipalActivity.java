@@ -44,11 +44,10 @@ public class PrincipalActivity extends AppCompatActivity
 
 
 
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Apertando esse floating button, é aberto o google maps
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +57,8 @@ public class PrincipalActivity extends AppCompatActivity
             }
         });
 
+
+        //Apertando nesse floating button o usuário da um logout do sistema
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab1);
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,29 +77,33 @@ public class PrincipalActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Declarados para pegar os valores do usuário logado no sistema
         View header = navigationView.getHeaderView(0);
         nome = (TextView)header.findViewById(R.id.nameProfile);
         foto = (CircleImageView) header.findViewById(R.id.profile_image);
 
 
-
+        //Obtendo o usuário que está logado atualmente no sistema e atribuindo a uma variável
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
-                    // User is signed in
+
                     Log.d("google", "onAuthStateChanged:signed_in:" + user.getUid());
+                //Obtem os valores de nome,email e a imagem do usuário logado atualmente
                     String name = user.getDisplayName();
                     String email = user.getEmail();
                     Uri photoUrl = user.getPhotoUrl();
                     nome.setText(name);
+                //Biblioteca externa que faz com que se pegue o URL
+                //da foto que o google disponibiliza e coloque no local que escolher
                 Glide.with(this)
                         .load(photoUrl)
                         .into(foto);
             }
             else {
-                    // User is signed out
+
                     Log.d("google", "onAuthStateChanged:signed_out");
                 }
-                // ...
+
             }
 
 
@@ -157,18 +162,18 @@ public class PrincipalActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    //Transição de tela
     public void achei(View view) {
         Intent i = new Intent(this,AcheiActivity.class);
         startActivity(i);
     }
 
-
+    //Transição de tela
     public void perdi(View view) {
         Intent i = new Intent(this,PerdiActivity.class);
         startActivity(i);
     }
-
+    //Transição de tela
     public void listagem(View view) {
         Intent i = new Intent(this,ListagemActivity.class);
         startActivity(i);

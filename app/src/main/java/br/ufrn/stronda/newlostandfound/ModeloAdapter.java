@@ -16,6 +16,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by STRONDA on 04/11/2016.
+ *
+ * Classe feita para modificar o listview para exibir mais do que só um texto, pode-se
+ * adicionar imagens e outros EditText's
  */
 
 public class ModeloAdapter extends ArrayAdapter<Modelolista> {

@@ -2,6 +2,8 @@ package br.ufrn.stronda.newlostandfound;
 
 /**
  * Created by STRONDA on 17/11/2016.
+ *
+ * Objeto criado para facilitar a inserção dos dados no banco de dados
  */
 
 public class PerdiObjeto {

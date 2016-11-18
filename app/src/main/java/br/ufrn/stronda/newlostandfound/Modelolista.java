@@ -2,6 +2,8 @@ package br.ufrn.stronda.newlostandfound;
 
 /**
  * Created by STRONDA on 04/11/2016.
+ *
+ * A classe ModeloAdapter extende ela pra fazer um ArrayList desse tipo
  */
 
 public class Modelolista {

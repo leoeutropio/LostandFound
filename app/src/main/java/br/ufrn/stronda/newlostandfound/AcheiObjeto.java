@@ -2,7 +2,10 @@ package br.ufrn.stronda.newlostandfound;
 
 /**
  * Created by STRONDA on 17/11/2016.
+ *
+ * Objeto criado para facilitar a inserção dos dados no banco de dados
  */
+
 
 public class AcheiObjeto {
 
@@ -12,7 +15,6 @@ public class AcheiObjeto {
 
 
     public AcheiObjeto() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
     public AcheiObjeto(String descricao, String categoria,String localizacao) {
