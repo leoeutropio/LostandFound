@@ -75,8 +75,8 @@ public class PerdiActivity extends AppCompatActivity {
             confirmar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mDatabase.child("Usuários").child(userid).child("nome").setValue(name);
-                    mDatabase.child("Usuários").child(userid).child("email").setValue(email);
+                    mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
+                    mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
                     //chama a função para cadastrar no banco
                     novoObjeto(descricao.getText().toString(),pcatspn.getSelectedItem().toString() ,plocspn.getSelectedItem().toString(),userid);
                     //após cadastrar, gera um toast para informar que foi cadastrado no banco
@@ -155,6 +155,6 @@ public class PerdiActivity extends AppCompatActivity {
     private void novoObjeto(String descricao, String categoria,String localizacao,String userId) {
         PerdiObjeto perdiObjeto = new PerdiObjeto(descricao,categoria,localizacao);
         //"setValue" coloca o valor que está no parâmetro, dentro do banco.
-        mDatabase.child("Usuários").child(userId).child("Objetos").child("Perdidos").setValue(perdiObjeto);
+        mDatabase.child("Usuarios").child(userId).child("Objetos").child("Perdidos").push().setValue(perdiObjeto);
     }
 }

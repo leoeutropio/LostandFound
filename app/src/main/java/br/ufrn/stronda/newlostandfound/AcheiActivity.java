@@ -72,11 +72,12 @@ public class AcheiActivity extends AppCompatActivity {
             //função vai executar quando o botão confirmar for clicado, pega os valores que estão nos spinners
             // e no campo de texto e vai cadastrar no banco de dados com as tags que estão abaixo, cada child é um nó
             // na tabela do banco.
+
             confirmar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mDatabase.child("Usuários").child(userid).child("nome").setValue(name);
-                    mDatabase.child("Usuários").child(userid).child("email").setValue(email);
+                    mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
+                    mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
                     //chama a função para cadastrar no banco
                     novoObjeto(descricao.getText().toString(),catspn.getSelectedItem().toString() ,locspn.getSelectedItem().toString(),userid);
                     //após cadastrar, gera um toast para informar que foi cadastrado no banco
@@ -101,7 +102,7 @@ public class AcheiActivity extends AppCompatActivity {
     private void novoObjeto(String descricao, String categoria,String localizacao,String userId) {
         AcheiObjeto acheiObjeto = new AcheiObjeto(descricao,categoria,localizacao);
         //"setValue" coloca o valor que está no parâmetro, dentro do banco.
-        mDatabase.child("Usuários").child(userId).child("Objetos").child("Achados").setValue(acheiObjeto);
+        mDatabase.child("Usuarios").child(userId).child("Objetos").child("Achados").push().setValue(acheiObjeto);
     }
 
 

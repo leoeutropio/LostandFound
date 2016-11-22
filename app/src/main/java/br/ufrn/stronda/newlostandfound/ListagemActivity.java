@@ -1,31 +1,31 @@
 package br.ufrn.stronda.newlostandfound;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.*;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-import static android.R.id.tabhost;
+import java.util.Map;
 
 public class ListagemActivity extends AppCompatActivity {
 
+    ArrayAdapter arrayAdapterA,arrayAdapterP;
     private ListView listaA,listaP;
     TabHost tabHost;
-    String adescric,acategoria,alocalizacao;
-    String pdescric,pcategoria,plocalizacao;
 
+    private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,7 @@ public class ListagemActivity extends AppCompatActivity {
         abasa.setIndicator("Achados");
         tabHost.addTab(abasa);
 
+
         //Adiciona um nome ao tab e disponibiliza na tela da activity
         TabHost.TabSpec abasp = tabHost.newTabSpec("Perdidos");
         abasp.setContent(R.id.Perdidos);
@@ -50,17 +51,17 @@ public class ListagemActivity extends AppCompatActivity {
 
         //Obtém o listview para adicionar valores ao mesmo e depois disponibiliza na tela
         listaA = (ListView) findViewById(R.id.listObjetosAchados);
-        ArrayAdapter arrayAdapterA = new ModeloAdapter(this, preencherInformacoes());
-        listaA.setAdapter(arrayAdapterA);
+
 
         //Obtém o listview para adicionar valores ao mesmo e depois disponibiliza na tela
         listaP = (ListView) findViewById(R.id.listObjetosPerdidos);
-        ArrayAdapter arrayAdapterP = new ModeloAdapter(this,preencherInformacoes1());
-        listaP.setAdapter(arrayAdapterP);
+
+
+
 
 
         //Função para detectar o toque em um item do listView
-        listaA.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+         listaA.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(view.getContext(), ObjetoActivity.class);
@@ -104,25 +105,95 @@ public class ListagemActivity extends AppCompatActivity {
 
             }
         });
-    }
 
-    //Função teste só para encher o listView
-    private ArrayList<Modelolista> preencherInformacoes() {
-        ArrayList<Modelolista> descricao = new ArrayList<Modelolista>();
 
-        Modelolista modelolista = new Modelolista(adescric,R.drawable.photoicon,alocalizacao,acategoria);
-        descricao.add(modelolista);
-        return descricao;
+
 
     }
 
-    //Função teste só para encher o listView
-    private ArrayList<Modelolista> preencherInformacoes1() {
-        ArrayList<Modelolista> descricao = new ArrayList<Modelolista>();
-        Modelolista modelolista = new Modelolista(pdescric,R.drawable.botaoachei,plocalizacao,pcategoria);
-        descricao.add(modelolista);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final String userid = user.getUid();
 
-        return descricao;
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayList<AcheiObjeto> objetos = new ArrayList<AcheiObjeto>();
+
+                for( DataSnapshot dsp : dataSnapshot.getChildren() ){
+
+                    for (DataSnapshot dspc : dsp.child("Objetos").child("Achados").getChildren()){
+
+                            AcheiObjeto o = new AcheiObjeto();
+                            o.setDescricao(dspc.child("descricao").getValue().toString());
+                            o.setCategoria(dspc.child("categoria").getValue().toString());
+                            o.setLocalizacao(dspc.child("localizacao").getValue().toString());
+
+                            Log.d("ID", dspc.getKey());
+                            Log.d("DESCRICAO", o.getDescricao());
+                            Log.d("CATEGORIA", o.getCategoria());
+                            Log.d("LOCALIZACAO", o.getLocalizacao());
+
+                            objetos.add(o);
+                    }
+
+                }
+                arrayAdapterA = new ModeloAdapter(ListagemActivity.this,objetos);
+                listaA.setAdapter(arrayAdapterA);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference().child("Usuarios");
+        ref1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ArrayList<PerdiObjeto> objetosp = new ArrayList<PerdiObjeto>();
+
+                for( DataSnapshot dsp1 : dataSnapshot.getChildren() ){
+
+                    for (DataSnapshot dspc1 : dsp1.child("Objetos").child("Perdidos").getChildren()){
+
+                            PerdiObjeto o = new PerdiObjeto();
+                            o.setDescricao(dspc1.child("descricao").getValue().toString());
+                            o.setCategoria(dspc1.child("categoria").getValue().toString());
+                            o.setLocalizacao(dspc1.child("localizacao").getValue().toString());
+
+                            Log.d("ID",dspc1.getKey());
+                            Log.d("DESCRICAO", o.getDescricao());
+                            Log.d("CATEGORIA", o.getCategoria());
+                            Log.d("LOCALIZACAO", o.getLocalizacao());
+
+                            objetosp.add(o);
+
+
+                    }
+
+                }
+                arrayAdapterP = new PerdiAdapter(ListagemActivity.this,objetosp);
+                listaP.setAdapter(arrayAdapterP);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
+
 
 }
