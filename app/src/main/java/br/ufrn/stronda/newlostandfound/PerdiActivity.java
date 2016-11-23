@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,12 +21,24 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.R.attr.bitmap;
 
 public class PerdiActivity extends AppCompatActivity {
     Spinner pcatspn,plocspn;
@@ -33,12 +46,20 @@ public class PerdiActivity extends AppCompatActivity {
     Button confirmar;
 
     private DatabaseReference mDatabase;
-
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
     public static final int IMAGEM_INTERNA = 12;
+
+    String idPerdido;
+    byte[] data1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perdi);
+
+
 
         //Associando os elementos da tela a variáveis na classe
         descricao = (EditText) findViewById(R.id.descricaoP);
@@ -58,9 +79,21 @@ public class PerdiActivity extends AppCompatActivity {
 
         //Atribuindo a instância do banco de dados Firebase a variável do firebase na classe
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        storage= FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+        //storageRef= storage.getReferenceFromUrl("gs://achados-e-perdidos-5f077.appspot.com/");
+
+
 
         //Obtendo o usuário que está logado atualmente no sistema e atribuindo a uma variável
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+        DatabaseReference novoNodeRef = mDatabase.child("Usuarios").child(user.getUid()).child("Objetos").child("Perdidos").push();
+        idPerdido = novoNodeRef.getKey();
+        Log.d("ID DO PERDIDO", idPerdido);
+
+
         if (user != null) {
             //Possui um usuário logado no sistema
             Log.d("google", "onAuthStateChanged:signed_in:" + user.getUid());
@@ -78,10 +111,31 @@ public class PerdiActivity extends AppCompatActivity {
                     mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
                     mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
                     //chama a função para cadastrar no banco
-                    novoObjeto(descricao.getText().toString(),pcatspn.getSelectedItem().toString() ,plocspn.getSelectedItem().toString(),userid);
-                    //após cadastrar, gera um toast para informar que foi cadastrado no banco
-                    Toast.makeText(getBaseContext(),"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
-                    finish();
+
+
+                    storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).putBytes(data1).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    novoObjeto(descricao.getText().toString(),pcatspn.getSelectedItem().toString() ,plocspn.getSelectedItem().toString(),userid,uri.toString());
+
+                                }
+                            });
+
+                            Toast.makeText(getBaseContext(),"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("Deu merda no storage", "AAAAA");
+                        }
+                    });
+
+
                 }
             });
         }
@@ -139,6 +193,9 @@ public class PerdiActivity extends AppCompatActivity {
                 //Após o processo de tirar a foto, ela é colocada dentro do
                 //CircleImageView para ser exibida
                 Bitmap img = (Bitmap) bundle.get("data");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                img.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                data1 = baos.toByteArray();
                 CircleImageView iv = (CircleImageView) findViewById(R.id.imgvw);
                 iv.setImageBitmap(img);
             }
@@ -152,9 +209,11 @@ public class PerdiActivity extends AppCompatActivity {
     }
 
     //É chamada apenas para cadastrar um objeto no banco.
-    private void novoObjeto(String descricao, String categoria,String localizacao,String userId) {
-        PerdiObjeto perdiObjeto = new PerdiObjeto(descricao,categoria,localizacao);
+    private void novoObjeto(String descricao, String categoria,String localizacao,String userId, String imagem) {
+        PerdiObjeto perdiObjeto = new PerdiObjeto(descricao,categoria,localizacao,imagem);
         //"setValue" coloca o valor que está no parâmetro, dentro do banco.
-        mDatabase.child("Usuarios").child(userId).child("Objetos").child("Perdidos").push().setValue(perdiObjeto);
+
+
+        mDatabase.child("Usuarios").child(userId).child("Objetos").child("Perdidos").child(idPerdido).setValue(perdiObjeto);
     }
 }

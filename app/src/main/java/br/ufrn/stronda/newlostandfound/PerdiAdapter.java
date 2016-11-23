@@ -1,13 +1,24 @@
 package br.ufrn.stronda.newlostandfound;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by STRONDA on 22/11/2016.
@@ -32,11 +43,18 @@ public class PerdiAdapter extends ArrayAdapter<PerdiObjeto> {
         TextView descricaoTxt = (TextView) rowView.findViewById(R.id.descTxt);
         TextView localizacaoTxt = (TextView) rowView.findViewById(R.id.catTxt);
         TextView categoriaTxt = (TextView) rowView.findViewById(R.id.locTxt);
+        CircleImageView imagem = (CircleImageView) rowView.findViewById(R.id.imgobj);
 
         descricaoTxt.setText(elementos.get(position).getDescricao());
         localizacaoTxt.setText(elementos.get(position).getCategoria());
         categoriaTxt.setText(elementos.get(position).getLocalizacao());
 
+        Glide.with(context).load(elementos.get(position).getImagem()).into(imagem);
+
+
+
         return rowView;
     }
+
+
 }

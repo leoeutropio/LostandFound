@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,11 +20,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ListagemActivity extends AppCompatActivity {
 
     ArrayAdapter arrayAdapterA,arrayAdapterP;
     private ListView listaA,listaP;
     TabHost tabHost;
+    CircleImageView imagem;
 
     private DatabaseReference mDatabase;
     @Override
@@ -31,6 +35,7 @@ public class ListagemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listagem);
 
+        imagem = (CircleImageView) findViewById(R.id.imgobj);
 
         //Associa o tab a classe e coloca para funcionar
         tabHost=(TabHost) findViewById(R.id.tabHost);
@@ -170,6 +175,7 @@ public class ListagemActivity extends AppCompatActivity {
                             o.setDescricao(dspc1.child("descricao").getValue().toString());
                             o.setCategoria(dspc1.child("categoria").getValue().toString());
                             o.setLocalizacao(dspc1.child("localizacao").getValue().toString());
+                            o.setImagem(dspc1.child("imagem").getValue().toString());
 
                             Log.d("ID",dspc1.getKey());
                             Log.d("DESCRICAO", o.getDescricao());
@@ -177,8 +183,6 @@ public class ListagemActivity extends AppCompatActivity {
                             Log.d("LOCALIZACAO", o.getLocalizacao());
 
                             objetosp.add(o);
-
-
                     }
 
                 }
