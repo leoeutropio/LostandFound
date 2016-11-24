@@ -49,7 +49,7 @@ public class PerdiActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageRef;
     public static final int IMAGEM_INTERNA = 12;
-
+    String pathImg;
     String idPerdido;
     byte[] data1;
 
@@ -85,73 +85,10 @@ public class PerdiActivity extends AppCompatActivity {
 
 
 
-        //Obtendo o usuário que está logado atualmente no sistema e atribuindo a uma variável
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-
-        DatabaseReference novoNodeRef = mDatabase.child("Usuarios").child(user.getUid()).child("Objetos").child("Perdidos").push();
-        idPerdido = novoNodeRef.getKey();
-        Log.d("ID DO PERDIDO", idPerdido);
-
-
-        if (user != null) {
-            //Possui um usuário logado no sistema
-            Log.d("google", "onAuthStateChanged:signed_in:" + user.getUid());
-            //Obtem os valores de nome,email e o id do usuário logado atualmente
-            final String name = user.getDisplayName();
-            final String email = user.getEmail();
-            final String userid = user.getUid();
-
-            //função vai executar quando o botão confirmar for clicado, pega os valores que estão nos spinners
-            // e no campo de texto e vai cadastrar no banco de dados com as tags que estão abaixo, cada child é um nó
-            // na tabela do banco.
-            confirmar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
-                    mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
-                    //chama a função para cadastrar no banco
-
-
-                    storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).putBytes(data1).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                            storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-
-                                    novoObjeto(descricao.getText().toString(),pcatspn.getSelectedItem().toString() ,plocspn.getSelectedItem().toString(),userid,uri.toString());
-
-                                }
-                            });
-
-                            Toast.makeText(getBaseContext(),"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("Deu merda no storage", "AAAAA");
-                        }
-                    });
-
-
-                }
-            });
-        }
-        else {
-            Log.d("google", "onAuthStateChanged:signed_out");
-        }
-
     }
 
 
 
-    //Função para ativar a câmera do celular e tirar uma foto
-    public void tirarfoto(View view) {
-        Intent i = new Intent("android.media.action.IMAGE_CAPTURE");
-        startActivityForResult(i,0);
-    }
     //Função para escolher uma imagem a partir da galeria do celular
     public void pegafoto(View view) {
         Intent i = new Intent(Intent.ACTION_GET_CONTENT);
@@ -164,10 +101,18 @@ public class PerdiActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        final String userid = user.getUid();
+        final String name = user.getDisplayName();
+        final String email = user.getEmail();
+
         //Aqui é tratado a parte da galeria do celular
         if(requestCode == IMAGEM_INTERNA){
             if(resultCode==RESULT_OK){
-                Uri imagemSelecionada = data.getData();
+                final Uri imagemSelecionada = data.getData();
+
+                DatabaseReference novoNodeRef = mDatabase.child("Usuarios").child(user.getUid()).child("Objetos").child("Perdidos").push();
+                idPerdido = novoNodeRef.getKey();
 
                 String[] colunas = {MediaStore.Images.Media.DATA};
 
@@ -175,7 +120,7 @@ public class PerdiActivity extends AppCompatActivity {
                 cursor.moveToFirst();
 
                 int indexColuna = cursor.getColumnIndex(colunas[0]);
-                String pathImg = cursor.getString(indexColuna);
+                pathImg = cursor.getString(indexColuna);
                 cursor.close();
 
                 //Após o processo de escolher a imagem, ela é colocada dentro do
@@ -183,11 +128,38 @@ public class PerdiActivity extends AppCompatActivity {
                 Bitmap bitmap = BitmapFactory.decodeFile(pathImg);
                 CircleImageView iv = (CircleImageView) findViewById(R.id.imgvw);
                 iv.setImageBitmap(bitmap);
+                confirmar.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
+                        mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
+
+                        storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).putFile(imagemSelecionada).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        novoObjeto(descricao.getText().toString(),pcatspn.getSelectedItem().toString() ,plocspn.getSelectedItem().toString(),userid,uri.toString());
+                                        Toast.makeText(PerdiActivity.this,"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
+                            }
+                        });
+
+
+                    }
+                });
+
+
+
             }
         }
 
         //Aqui é tratado a parte de tirar foto do celular
-        if (data!=null){
+        /*if (data!=null){
             Bundle bundle = data.getExtras();
             if(bundle != null){
                 //Após o processo de tirar a foto, ela é colocada dentro do
@@ -199,8 +171,7 @@ public class PerdiActivity extends AppCompatActivity {
                 CircleImageView iv = (CircleImageView) findViewById(R.id.imgvw);
                 iv.setImageBitmap(img);
             }
-        }
-
+        }*/
 
     }
 
@@ -212,8 +183,6 @@ public class PerdiActivity extends AppCompatActivity {
     private void novoObjeto(String descricao, String categoria,String localizacao,String userId, String imagem) {
         PerdiObjeto perdiObjeto = new PerdiObjeto(descricao,categoria,localizacao,imagem);
         //"setValue" coloca o valor que está no parâmetro, dentro do banco.
-
-
         mDatabase.child("Usuarios").child(userId).child("Objetos").child("Perdidos").child(idPerdido).setValue(perdiObjeto);
     }
 }

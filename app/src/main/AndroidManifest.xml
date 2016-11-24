@@ -76,7 +76,11 @@
         <activity
             android:name=".PrincipalActivity"
             android:label=" "
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ObjetosCadastradosActivity"
+            android:label="Objetos cadastrados"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

@@ -5,6 +5,8 @@
     android:id="@+id/content_principal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingRight="10dp"
+    android:paddingLeft="10dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="br.ufrn.stronda.newlostandfound.PrincipalActivity"
     tools:showIn="@layout/app_bar_principal"
@@ -15,7 +17,7 @@
         android:layout_height="90dp"
         android:id="@+id/achei"
         android:background="@drawable/botaoachei"
-        android:layout_marginLeft="10dp"
+        android:layout_alignParentLeft="true"
         android:onClick="achei"
         android:layout_centerVertical="true"/>
 
@@ -25,9 +27,9 @@
         android:layout_height="90dp"
         android:id="@+id/perdiBtn"
         android:background="@drawable/botaoperdi"
-        android:layout_marginLeft="115dp"
         android:onClick="perdi"
         android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         />
 
     <ImageButton
@@ -35,7 +37,7 @@
         android:layout_height="90dp"
         android:id="@+id/listagemBtn"
         android:background="@drawable/list"
-        android:layout_marginLeft="220dp"
+        android:layout_alignParentRight="true"
         android:onClick="listagem"
         android:layout_centerVertical="true"
         />

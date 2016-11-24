@@ -157,8 +157,10 @@ public class PrincipalActivity extends AppCompatActivity
 
             // Handle the camera action
         } else if (id == R.id.nav_objetos) {
-
+            Intent intent = new Intent(this,ObjetosCadastradosActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_configuracoes) {
+
 
         } else if (id == R.id.nav_sobre) {
             Intent intent = new Intent(this,SobreActivity.class);

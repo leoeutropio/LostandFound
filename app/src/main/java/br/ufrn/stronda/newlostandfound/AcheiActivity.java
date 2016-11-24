@@ -3,7 +3,11 @@ package br.ufrn.stronda.newlostandfound;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,11 +31,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Comment;
 
+import java.io.ByteArrayOutputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AcheiActivity extends AppCompatActivity {
     Spinner catspn,locspn;
     EditText descricao;
     Button confirmar;
     AcheiObjeto acheiObjeto;
+    byte[] data1;
     private DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +101,31 @@ public class AcheiActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Aqui é tratado a parte de tirar foto do celular
+        if (data!=null){
+            Bundle bundle = data.getExtras();
+            if(bundle != null){
+                //Após o processo de tirar a foto, ela é colocada dentro do
+                //CircleImageView para ser exibida
+                Bitmap img = (Bitmap) bundle.get("data");
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                img.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                data1 = baos.toByteArray();
+                CircleImageView iv = (CircleImageView) findViewById(R.id.imgvw);
+                iv.setImageBitmap(img);
+            }
+        }
+
+
+    }
+
+
 
     public void cancelar(View view) {
         this.finish();
