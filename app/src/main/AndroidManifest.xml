@@ -80,7 +80,10 @@
         <activity
             android:name=".ObjetosCadastradosActivity"
             android:label="Objetos cadastrados"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".PerfilActivity"
+            android:label=" "
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

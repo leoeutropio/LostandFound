@@ -66,7 +66,7 @@ public class ObjetosCadastradosActivity extends AppCompatActivity {
             tv.setTextSize(15);
         }
 
-        tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#C0C0C0")); // selected
+        tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#37173B")); // selected
         TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
         tv.setTextColor(Color.parseColor("#9c7b00"));
         tv.setTextSize(15);
@@ -86,7 +86,7 @@ public class ObjetosCadastradosActivity extends AppCompatActivity {
                     tv.setTextSize(15);
                 }
 
-                tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#C0C0C0")); // selected
+                tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#37173B")); // selected
                 TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
                 tv.setTextColor(Color.parseColor("#9c7b00"));
                 tv.setTextSize(15);

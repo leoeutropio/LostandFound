@@ -13,13 +13,61 @@
         android:layout_height="250dp"
         android:paddingTop="20dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/marioimg"/>
+        android:src="@drawable/marioimg"
+        android:id="@+id/imagemObjeto"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Alguma coisa escrita aqui falando sobre o objeto"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="200dp"
+        android:text="localizacao"
+        android:layout_marginTop="330dp"
+        android:textAlignment="center"
         android:textSize="15dp"
-        android:textColor="@color/textcolor"/>
+        android:textColor="@color/textcolor"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/localizacaoobjeto"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="categoria"
+        android:layout_centerHorizontal="true"
+      android:layout_marginTop="360dp"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textColor="@color/textcolor"
+        android:id="@+id/categoriaobjeto"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="descricao"
+        android:layout_marginTop="280dp"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textColor="@color/textcolor"
+        android:id="@+id/descricaoobjeto"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nome"
+        android:layout_marginTop="400dp"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textColor="@color/textcolor"
+        android:id="@+id/nome"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="email"
+        android:layout_marginTop="430dp"
+        android:textAlignment="center"
+        android:textSize="15dp"
+        android:textColor="@color/textcolor"
+        android:id="@+id/email"
+        android:layout_centerHorizontal="true"
+        />
 </RelativeLayout>

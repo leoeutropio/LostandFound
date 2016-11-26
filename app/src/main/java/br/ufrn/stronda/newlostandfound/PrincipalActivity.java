@@ -154,7 +154,8 @@ public class PrincipalActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_perfil) {
-
+            Intent i = new Intent(this, PerfilActivity.class);
+            startActivity(i);
             // Handle the camera action
         } else if (id == R.id.nav_objetos) {
             Intent intent = new Intent(this,ObjetosCadastradosActivity.class);

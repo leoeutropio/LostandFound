@@ -28,6 +28,10 @@ public class ListagemActivity extends AppCompatActivity {
     private ListView listaA,listaP;
     TabHost tabHost;
     CircleImageView imagem;
+    String desca,loca,cata,descp,locp,catp;
+    String  imagema;
+    String nome,email;
+
 
     private DatabaseReference mDatabase;
     @Override
@@ -66,9 +70,12 @@ public class ListagemActivity extends AppCompatActivity {
 
 
         //Função para detectar o toque em um item do listView
-         listaA.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+        listaP.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Intent intent = new Intent(view.getContext(), ObjetoActivity.class);
                 startActivity(intent);
             }
@@ -83,7 +90,7 @@ public class ListagemActivity extends AppCompatActivity {
             tv.setTextSize(15);
         }
 
-        tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#C0C0C0")); // selected
+        tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#37173B")); // selected
         TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
         tv.setTextColor(Color.parseColor("#9c7b00"));
         tv.setTextSize(15);
@@ -103,7 +110,7 @@ public class ListagemActivity extends AppCompatActivity {
                     tv.setTextSize(15);
                 }
 
-                tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#C0C0C0")); // selected
+                tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#37173B")); // selected
                 TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
                 tv.setTextColor(Color.parseColor("#9c7b00"));
                 tv.setTextSize(15);
@@ -128,9 +135,11 @@ public class ListagemActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                ArrayList<AcheiObjeto> objetos = new ArrayList<AcheiObjeto>();
+                final ArrayList<AcheiObjeto> objetos = new ArrayList<AcheiObjeto>();
 
                 for( DataSnapshot dsp : dataSnapshot.getChildren() ){
+                         nome = dsp.child("nome").getValue().toString();
+                         email = dsp.child("email").getValue().toString();
 
                     for (DataSnapshot dspc : dsp.child("Objetos").child("Achados").getChildren()){
 
@@ -151,6 +160,23 @@ public class ListagemActivity extends AppCompatActivity {
                 arrayAdapterA = new ModeloAdapter(ListagemActivity.this,objetos);
                 listaA.setAdapter(arrayAdapterA);
 
+                listaA.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        desca = objetos.get(position).getDescricao();
+                        cata = objetos.get(position).getCategoria();
+                        loca = objetos.get(position).getLocalizacao();
+                        Intent intent = new Intent(view.getContext(), ObjetoActivity.class);
+                        intent.putExtra("nome",nome);
+                        intent.putExtra("email",email);
+                        intent.putExtra("descricao",desca);
+                        intent.putExtra("categoria",cata);
+                        intent.putExtra("localizacao",loca);
+                        intent.putExtra("imagemint",R.drawable.general);
+                        startActivity(intent);
+                    }
+                });
+
             }
 
             @Override
@@ -165,7 +191,7 @@ public class ListagemActivity extends AppCompatActivity {
         ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<PerdiObjeto> objetosp = new ArrayList<PerdiObjeto>();
+                final ArrayList<PerdiObjeto> objetosp = new ArrayList<PerdiObjeto>();
 
                 for( DataSnapshot dsp1 : dataSnapshot.getChildren() ){
 
@@ -177,7 +203,9 @@ public class ListagemActivity extends AppCompatActivity {
                             o.setLocalizacao(dspc1.child("localizacao").getValue().toString());
                             o.setImagem(dspc1.child("imagem").getValue().toString());
 
+                            imagema = dspc1.child("imagem").getValue().toString();
                             Log.d("ID",dspc1.getKey());
+
                             Log.d("DESCRICAO", o.getDescricao());
                             Log.d("CATEGORIA", o.getCategoria());
                             Log.d("LOCALIZACAO", o.getLocalizacao());
@@ -188,6 +216,22 @@ public class ListagemActivity extends AppCompatActivity {
                 }
                 arrayAdapterP = new PerdiAdapter(ListagemActivity.this,objetosp);
                 listaP.setAdapter(arrayAdapterP);
+                listaP.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        descp = objetosp.get(position).getDescricao();
+                        catp = objetosp.get(position).getCategoria();
+                        locp = objetosp.get(position).getLocalizacao();
+
+                        Intent intent = new Intent(view.getContext(), ObjetoActivity.class);
+                        intent.putExtra("descricao",descp);
+                        intent.putExtra("categoria",catp);
+                        intent.putExtra("localizacao",locp);
+                        intent.putExtra("imagem",imagema);
+                        startActivity(intent);
+                    }
+                });
+
             }
 
             @Override

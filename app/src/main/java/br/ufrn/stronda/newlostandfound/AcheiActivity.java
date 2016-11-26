@@ -89,6 +89,7 @@ public class AcheiActivity extends AppCompatActivity {
                     mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
                     //chama a função para cadastrar no banco
                     novoObjeto(descricao.getText().toString(),catspn.getSelectedItem().toString() ,locspn.getSelectedItem().toString(),userid);
+
                     //após cadastrar, gera um toast para informar que foi cadastrado no banco
                     Toast.makeText(getBaseContext(),"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
                     finish();

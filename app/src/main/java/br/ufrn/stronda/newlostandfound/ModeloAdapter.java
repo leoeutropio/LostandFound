@@ -42,7 +42,7 @@ public class ModeloAdapter extends ArrayAdapter<AcheiObjeto> {
         TextView categoriaTxt = (TextView) rowView.findViewById(R.id.locTxt);
         CircleImageView imagem = (CircleImageView) rowView.findViewById(R.id.imgobj);
 
-        imagem.setImageResource(R.drawable.objects);
+        imagem.setImageResource(R.drawable.general);
         descricaoTxt.setText(elementos.get(position).getDescricao());
         localizacaoTxt.setText(elementos.get(position).getCategoria());
         categoriaTxt.setText(elementos.get(position).getLocalizacao());
