@@ -138,8 +138,6 @@ public class ListagemActivity extends AppCompatActivity {
                 final ArrayList<AcheiObjeto> objetos = new ArrayList<AcheiObjeto>();
 
                 for( DataSnapshot dsp : dataSnapshot.getChildren() ){
-                         nome = dsp.child("nome").getValue().toString();
-                         email = dsp.child("email").getValue().toString();
 
                     for (DataSnapshot dspc : dsp.child("Objetos").child("Achados").getChildren()){
 
@@ -167,8 +165,6 @@ public class ListagemActivity extends AppCompatActivity {
                         cata = objetos.get(position).getCategoria();
                         loca = objetos.get(position).getLocalizacao();
                         Intent intent = new Intent(view.getContext(), ObjetoActivity.class);
-                        intent.putExtra("nome",nome);
-                        intent.putExtra("email",email);
                         intent.putExtra("descricao",desca);
                         intent.putExtra("categoria",cata);
                         intent.putExtra("localizacao",loca);
