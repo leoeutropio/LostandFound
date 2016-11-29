@@ -60,15 +60,15 @@ public class ObjetosCadastradosActivity extends AppCompatActivity {
         listaP = (ListView) findViewById(R.id.perfilPerdidos);
 
         for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-            tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#270A2B")); // unselected
+            tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#290884")); // unselected
             TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
-            tv.setTextColor(Color.parseColor("#9c7b00"));
+            tv.setTextColor(Color.parseColor("#FFFFFF"));
             tv.setTextSize(15);
         }
 
-        tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#37173B")); // selected
+        tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#1F046B")); // selected
         TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
-        tv.setTextColor(Color.parseColor("#9c7b00"));
+        tv.setTextColor(Color.parseColor("#FFFFFF"));
         tv.setTextSize(15);
 
 
@@ -80,15 +80,15 @@ public class ObjetosCadastradosActivity extends AppCompatActivity {
             public void onTabChanged(String tabId) {
 
                 for (int i = 0; i < tabHost.getTabWidget().getChildCount(); i++) {
-                    tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#270A2B")); // unselected
+                    tabHost.getTabWidget().getChildAt(i).setBackgroundColor(Color.parseColor("#290884")); // unselected
                     TextView tv = (TextView) tabHost.getTabWidget().getChildAt(i).findViewById(android.R.id.title); //Unselected Tabs
-                    tv.setTextColor(Color.parseColor("#9c7b00"));
+                    tv.setTextColor(Color.parseColor("#FFFFFF"));
                     tv.setTextSize(15);
                 }
 
-                tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#37173B")); // selected
+                tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#1F046B")); // selected
                 TextView tv = (TextView) tabHost.getCurrentTabView().findViewById(android.R.id.title); //for Selected Tab
-                tv.setTextColor(Color.parseColor("#9c7b00"));
+                tv.setTextColor(Color.parseColor("#FFFFFF"));
                 tv.setTextSize(15);
 
             }

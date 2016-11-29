@@ -64,7 +64,7 @@
         android:layout_height="90dp"
         android:id="@+id/galeriaBtn"
         android:layout_marginTop="170dp"
-        android:src="@drawable/imageicon1"
+        android:src="@drawable/gallery1"
         android:onClick="pegafoto"
         android:layout_centerHorizontal="true"
         />
@@ -96,7 +96,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:src="@drawable/rsz_landscape"
+        android:src="@drawable/mountain"
         android:id="@+id/imgvw"
         android:layout_marginTop="285dp"
         android:layout_centerHorizontal="true" />
