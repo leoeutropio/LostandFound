@@ -88,7 +88,7 @@ public class AcheiActivity extends AppCompatActivity {
                     mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
                     mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
                     //chama a função para cadastrar no banco
-                    novoObjeto(descricao.getText().toString(),catspn.getSelectedItem().toString() ,locspn.getSelectedItem().toString(),userid);
+                    novoObjeto(descricao.getText().toString(),catspn.getSelectedItem().toString() ,locspn.getSelectedItem().toString(),userid,user.getDisplayName(),user.getEmail());
 
                     //após cadastrar, gera um toast para informar que foi cadastrado no banco
                     Toast.makeText(getBaseContext(),"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
@@ -134,10 +134,12 @@ public class AcheiActivity extends AppCompatActivity {
 
 
     //É chamada apenas para cadastrar um objeto no banco.
-    private void novoObjeto(String descricao, String categoria,String localizacao,String userId) {
-        AcheiObjeto acheiObjeto = new AcheiObjeto(descricao,categoria,localizacao);
+    private void novoObjeto(String descricao, String categoria,String localizacao,String userId,String nome, String email) {
+        String id = mDatabase.child("Usuarios").child(userId).child("Objetos").child("Achados").push().getKey();
+        AcheiObjeto acheiObjeto = new AcheiObjeto(descricao,categoria,localizacao,nome,email,id);
         //"setValue" coloca o valor que está no parâmetro, dentro do banco.
-        mDatabase.child("Usuarios").child(userId).child("Objetos").child("Achados").push().setValue(acheiObjeto);
+
+        mDatabase.child("Usuarios").child(userId).child("Objetos").child("Achados").child(id).setValue(acheiObjeto);
     }
 
 

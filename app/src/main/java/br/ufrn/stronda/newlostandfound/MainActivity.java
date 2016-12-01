@@ -28,7 +28,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 
 public class MainActivity extends AppCompatActivity {
-    Button login;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     GoogleApiClient mGoogleApiClient;
@@ -91,15 +90,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-
-        login = (Button) findViewById(R.id.loginBtn);
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this,PrincipalActivity.class);
-                    startActivity(intent);
-            }
-        });
     }
 
 

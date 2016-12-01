@@ -16,7 +16,7 @@ public class ObjetoActivity extends AppCompatActivity {
     //QUANDO IMPLEMENTARMOS O BANCO
 
 
-    TextView descricao,localizacao,categoria;
+    TextView descricao,localizacao,categoria,n,e;
     CircleImageView image;
 
     @Override
@@ -24,12 +24,14 @@ public class ObjetoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_objeto);
         Bundle extras;
-        String newString,newString1,newString2,imagemstring;
+        String newString,newString1,newString2,imagemstring,nome,email;
         int imagemint=0;
         descricao = (TextView) findViewById(R.id.descricaoobjeto);
         localizacao = (TextView) findViewById(R.id.localizacaoobjeto);
         categoria = (TextView) findViewById(R.id.categoriaobjeto);
         image = (CircleImageView) findViewById(R.id.imagemObjeto);
+        n = (TextView) findViewById(R.id.nomeob);
+        e = (TextView) findViewById(R.id.emailob);
 
 
         if (savedInstanceState == null) {
@@ -40,6 +42,8 @@ public class ObjetoActivity extends AppCompatActivity {
                 newString2=null;
                 imagemstring = null;
                 imagemint = 0;
+                nome = null;
+                email = null;
 
             }
             else{
@@ -48,22 +52,29 @@ public class ObjetoActivity extends AppCompatActivity {
                 newString2=extras.getString("localizacao");
                 imagemstring = extras.getString("imagem");
                 imagemint = extras.getInt("imagemint");
+                nome = extras.getString("nome");
+                email = extras.getString("email");
 
 
                 if(imagemstring!=null){
                 Glide.with(this).load(imagemstring).into(image);
                 }
-                if (imagemint!=0){
+                else if (imagemint!=0){
                     image.setImageResource(imagemint);
                 }
 
                 descricao.setText(newString);
                 categoria.setText(newString1);
                 localizacao.setText(newString2);
+                n.setText(nome);
+                e.setText(email);
+
 
                 descricao.setAllCaps(true);
                 categoria.setAllCaps(true);
                 localizacao.setAllCaps(true);
+                n.setAllCaps(true);
+                e.setAllCaps(true);
 
             }
         }

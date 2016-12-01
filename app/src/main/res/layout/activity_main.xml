@@ -7,33 +7,23 @@
     tools:context="br.ufrn.stronda.newlostandfound.MainActivity"
     android:background="@color/colorbg">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:id="@+id/loginBtn"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="250dp"
-            android:background="@drawable/circlebtn"
-            android:onClick="login"
-            android:textColor="@color/textcolor"
-            />
-
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="300dp"
             android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             />
 
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:background="@drawable/logoactivity"
-            android:layout_marginTop="20dp"
+            android:background="@drawable/novologo"
+            android:layout_marginTop="17dp"
             android:id="@+id/imageView"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

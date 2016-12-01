@@ -1,8 +1,12 @@
 package br.ufrn.stronda.newlostandfound;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +37,22 @@ public class PerfilActivity extends AppCompatActivity {
         emai = (TextView) findViewById(R.id.emailperfil);
         imagem = (CircleImageView) findViewById(R.id.fotoperfil);
         telefone = (TextView) findViewById(R.id.telefoneperfil);
+        final ProgressDialog progress = new ProgressDialog(this);
+
+        progress.setMessage("AGUARDE, ATUALIZANDO");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.show();
+
+        Runnable progressRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                progress.cancel();
+            }
+        };
+
+        Handler pdCanceller = new Handler();
+        pdCanceller.postDelayed(progressRunnable, 2500);
 
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab2);
         fab1.setOnClickListener(new View.OnClickListener() {
@@ -63,11 +83,13 @@ public class PerfilActivity extends AppCompatActivity {
 
         }
 
+
+
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Usuarios").child(userid);
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                telefone.setText("TELEFONE: "+ dataSnapshot.child("telefone").getValue().toString());
+                //telefone.setText("TELEFONE: "+ dataSnapshot.child("telefone").getValue().toString());
                 nome.setText("Nome: "+ dataSnapshot.child("nome").getValue().toString());
                 emai.setText("Email: "+ dataSnapshot.child("email").getValue().toString());
                 nome.setAllCaps(true);

@@ -1,9 +1,14 @@
 package br.ufrn.stronda.newlostandfound;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TabHost;
@@ -27,12 +32,31 @@ public class ObjetosCadastradosActivity extends AppCompatActivity {
     private ListView listaA,listaP;
     TabHost tabHost;
     CircleImageView imagem;
+    String desca,loca,cata,descp,locp,catp;
+    String  imagema;
+    String nomea,emaila,nomep,emailp;
+    String keya,keyb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_objetos_cadastrados);
+        final ProgressDialog progress = new ProgressDialog(this);
 
+        progress.setMessage("AGUARDE, ATUALIZANDO");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.show();
+
+        Runnable progressRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                progress.cancel();
+            }
+        };
+
+        Handler pdCanceller = new Handler();
+        pdCanceller.postDelayed(progressRunnable, 3500);
 
         imagem = (CircleImageView) findViewById(R.id.imgobj);
 
@@ -108,7 +132,7 @@ public class ObjetosCadastradosActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                ArrayList<AcheiObjeto> objetos = new ArrayList<AcheiObjeto>();
+                final ArrayList<AcheiObjeto> objetos = new ArrayList<AcheiObjeto>();
 
                     for (DataSnapshot dspc : dataSnapshot.child("Objetos").child("Achados").getChildren()){
 
@@ -116,17 +140,47 @@ public class ObjetosCadastradosActivity extends AppCompatActivity {
                         o.setDescricao(dspc.child("descricao").getValue().toString());
                         o.setCategoria(dspc.child("categoria").getValue().toString());
                         o.setLocalizacao(dspc.child("localizacao").getValue().toString());
+                        o.setNome(dspc.child("nome").getValue().toString());
+                        o.setEmail(dspc.child("email").getValue().toString());
+                        o.setKey(dspc.child("key").getValue().toString());
 
                         Log.d("ID", dspc.getKey());
                         Log.d("DESCRICAO", o.getDescricao());
                         Log.d("CATEGORIA", o.getCategoria());
                         Log.d("LOCALIZACAO", o.getLocalizacao());
+                        Log.d("NOME", o.getNome());
+                        Log.d("EMAIL", o.getEmail());
 
                         objetos.add(o);
                     }
 
                 arrayAdapterA = new ModeloAdapter(ObjetosCadastradosActivity.this,objetos);
                 listaA.setAdapter(arrayAdapterA);
+
+
+                listaA.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        desca = objetos.get(position).getDescricao();
+                        cata = objetos.get(position).getCategoria();
+                        loca = objetos.get(position).getLocalizacao();
+                        nomea = objetos.get(position).getNome();
+                        emaila= objetos.get(position).getEmail();
+                        keya = objetos.get(position).getKey();
+
+
+                        Intent intent = new Intent(view.getContext(), RemoverObjetosActivity.class);
+                        intent.putExtra("removerdescricao",desca);
+                        intent.putExtra("removercategoria",cata);
+                        intent.putExtra("removerlocalizacao",loca);
+                        intent.putExtra("removerimagemint",R.drawable.general);
+                        intent.putExtra("nome",nomea);
+                        intent.putExtra("email",emaila);
+                        intent.putExtra("key",keya);
+                        intent.putExtra("achados",true);
+                        startActivity(intent);
+                    }
+                });
 
             }
 
@@ -142,7 +196,7 @@ public class ObjetosCadastradosActivity extends AppCompatActivity {
         ref1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<PerdiObjeto> objetosp = new ArrayList<PerdiObjeto>();
+                final ArrayList<PerdiObjeto> objetosp = new ArrayList<PerdiObjeto>();
 
 
 
@@ -153,17 +207,45 @@ public class ObjetosCadastradosActivity extends AppCompatActivity {
                         o.setCategoria(dspc1.child("categoria").getValue().toString());
                         o.setLocalizacao(dspc1.child("localizacao").getValue().toString());
                         o.setImagem(dspc1.child("imagem").getValue().toString());
+                        o.setNome(dspc1.child("nome").getValue().toString());
+                        o.setEmail(dspc1.child("email").getValue().toString());
+                        o.setKey(dspc1.child("key").getValue().toString());
 
                         Log.d("ID",dspc1.getKey());
                         Log.d("DESCRICAO", o.getDescricao());
                         Log.d("CATEGORIA", o.getCategoria());
                         Log.d("LOCALIZACAO", o.getLocalizacao());
+                        Log.d("NOME", o.getNome());
+                        Log.d("EMAIL", o.getEmail());
 
                         objetosp.add(o);
                     }
 
                 arrayAdapterP = new PerdiAdapter(ObjetosCadastradosActivity.this,objetosp);
                 listaP.setAdapter(arrayAdapterP);
+                listaP.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        descp = objetosp.get(position).getDescricao();
+                        catp = objetosp.get(position).getCategoria();
+                        locp = objetosp.get(position).getLocalizacao();
+                        nomep = objetosp.get(position).getNome();
+                        emailp = objetosp.get(position).getEmail();
+                        imagema = objetosp.get(position).getImagem();
+                        keyb = objetosp.get(position).getKey();
+
+                        Intent intent = new Intent(view.getContext(), RemoverObjetosActivity.class);
+                        intent.putExtra("removerdescricao",descp);
+                        intent.putExtra("removercategoria",catp);
+                        intent.putExtra("removerlocalizacao",locp);
+                        intent.putExtra("removerimagem",imagema);
+                        intent.putExtra("nome",nomep);
+                        intent.putExtra("email",emailp);
+                        intent.putExtra("key",keyb);
+                        intent.putExtra("perdidos",true);
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override

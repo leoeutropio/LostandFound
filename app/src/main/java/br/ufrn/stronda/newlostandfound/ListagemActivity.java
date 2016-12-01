@@ -1,7 +1,9 @@
 package br.ufrn.stronda.newlostandfound;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +32,7 @@ public class ListagemActivity extends AppCompatActivity {
     CircleImageView imagem;
     String desca,loca,cata,descp,locp,catp;
     String  imagema;
-    String nome,email;
+    String nomea,emaila,nomep,emailp;
 
 
     private DatabaseReference mDatabase;
@@ -38,6 +40,23 @@ public class ListagemActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listagem);
+
+        final ProgressDialog progress = new ProgressDialog(this);
+
+        progress.setMessage("AGUARDE, ATUALIZANDO");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.show();
+
+        Runnable progressRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                progress.cancel();
+            }
+        };
+
+        Handler pdCanceller = new Handler();
+        pdCanceller.postDelayed(progressRunnable, 3500);
 
         imagem = (CircleImageView) findViewById(R.id.imgobj);
 
@@ -139,12 +158,15 @@ public class ListagemActivity extends AppCompatActivity {
 
                 for( DataSnapshot dsp : dataSnapshot.getChildren() ){
 
+
                     for (DataSnapshot dspc : dsp.child("Objetos").child("Achados").getChildren()){
 
                             AcheiObjeto o = new AcheiObjeto();
                             o.setDescricao(dspc.child("descricao").getValue().toString());
                             o.setCategoria(dspc.child("categoria").getValue().toString());
                             o.setLocalizacao(dspc.child("localizacao").getValue().toString());
+                            o.setNome(dspc.child("nome").getValue().toString());
+                            o.setEmail(dspc.child("email").getValue().toString());
 
                             Log.d("ID", dspc.getKey());
                             Log.d("DESCRICAO", o.getDescricao());
@@ -164,11 +186,16 @@ public class ListagemActivity extends AppCompatActivity {
                         desca = objetos.get(position).getDescricao();
                         cata = objetos.get(position).getCategoria();
                         loca = objetos.get(position).getLocalizacao();
+                        nomea = objetos.get(position).getNome();
+                        emaila= objetos.get(position).getEmail();
+
                         Intent intent = new Intent(view.getContext(), ObjetoActivity.class);
                         intent.putExtra("descricao",desca);
                         intent.putExtra("categoria",cata);
                         intent.putExtra("localizacao",loca);
                         intent.putExtra("imagemint",R.drawable.general);
+                        intent.putExtra("nome",nomea);
+                        intent.putExtra("email",emaila);
                         startActivity(intent);
                     }
                 });
@@ -198,8 +225,11 @@ public class ListagemActivity extends AppCompatActivity {
                             o.setCategoria(dspc1.child("categoria").getValue().toString());
                             o.setLocalizacao(dspc1.child("localizacao").getValue().toString());
                             o.setImagem(dspc1.child("imagem").getValue().toString());
+                            o.setNome(dspc1.child("nome").getValue().toString());
+                            o.setEmail(dspc1.child("email").getValue().toString());
 
-                            imagema = dspc1.child("imagem").getValue().toString();
+
+
                             Log.d("ID",dspc1.getKey());
 
                             Log.d("DESCRICAO", o.getDescricao());
@@ -218,12 +248,17 @@ public class ListagemActivity extends AppCompatActivity {
                         descp = objetosp.get(position).getDescricao();
                         catp = objetosp.get(position).getCategoria();
                         locp = objetosp.get(position).getLocalizacao();
+                        nomep = objetosp.get(position).getNome();
+                        emailp = objetosp.get(position).getEmail();
+                        imagema = objetosp.get(position).getImagem();
 
                         Intent intent = new Intent(view.getContext(), ObjetoActivity.class);
                         intent.putExtra("descricao",descp);
                         intent.putExtra("categoria",catp);
                         intent.putExtra("localizacao",locp);
                         intent.putExtra("imagem",imagema);
+                        intent.putExtra("nome",nomep);
+                        intent.putExtra("email",emailp);
                         startActivity(intent);
                     }
                 });

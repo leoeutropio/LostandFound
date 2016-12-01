@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -127,7 +128,10 @@ public class PerdiActivity extends AppCompatActivity {
                 //CircleImageView para ser exibida
                 Bitmap bitmap = BitmapFactory.decodeFile(pathImg);
                 CircleImageView iv = (CircleImageView) findViewById(R.id.imgvw);
-                iv.setImageBitmap(bitmap);
+                Glide.with(this)
+                        .load(imagemSelecionada)
+                        .into(iv);
+                ;
                 confirmar.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -141,7 +145,7 @@ public class PerdiActivity extends AppCompatActivity {
                                 storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                     @Override
                                     public void onSuccess(Uri uri) {
-                                        novoObjeto(descricao.getText().toString(),pcatspn.getSelectedItem().toString() ,plocspn.getSelectedItem().toString(),userid,uri.toString());
+                                        novoObjeto(descricao.getText().toString(),pcatspn.getSelectedItem().toString() ,plocspn.getSelectedItem().toString(),userid,uri.toString(),user.getDisplayName(),user.getEmail());
                                         Toast.makeText(PerdiActivity.this,"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
                                         finish();
                                     }
@@ -180,8 +184,8 @@ public class PerdiActivity extends AppCompatActivity {
     }
 
     //É chamada apenas para cadastrar um objeto no banco.
-    private void novoObjeto(String descricao, String categoria,String localizacao,String userId, String imagem) {
-        PerdiObjeto perdiObjeto = new PerdiObjeto(descricao,categoria,localizacao,imagem);
+    private void novoObjeto(String descricao, String categoria,String localizacao,String userId, String imagem,String nome, String email) {
+        PerdiObjeto perdiObjeto = new PerdiObjeto(descricao,categoria,localizacao,imagem,nome,email,idPerdido);
         //"setValue" coloca o valor que está no parâmetro, dentro do banco.
         mDatabase.child("Usuarios").child(userId).child("Objetos").child("Perdidos").child(idPerdido).setValue(perdiObjeto);
     }
