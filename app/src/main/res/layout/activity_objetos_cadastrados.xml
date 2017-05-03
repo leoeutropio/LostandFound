@@ -4,7 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/tabHost"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        tools:context="br.ufrn.stronda.newlostandfound.ObjetosCadastradosActivity">
+        tools:context="br.ufrn.stronda.newlostandfound.Activity.ObjetosCadastradosActivity">
 
         <TabWidget
             android:layout_width="match_parent"

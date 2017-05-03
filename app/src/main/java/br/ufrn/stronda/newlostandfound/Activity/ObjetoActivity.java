@@ -1,4 +1,4 @@
-package br.ufrn.stronda.newlostandfound;
+package br.ufrn.stronda.newlostandfound.Activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import br.ufrn.stronda.newlostandfound.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ObjetoActivity extends AppCompatActivity {
@@ -63,11 +64,11 @@ public class ObjetoActivity extends AppCompatActivity {
                     image.setImageResource(imagemint);
                 }
 
-                descricao.setText(newString);
-                categoria.setText(newString1);
-                localizacao.setText(newString2);
-                n.setText(nome);
-                e.setText(email);
+                descricao.setText("Descrição:\n"+newString);
+                categoria.setText("Categoria:\n"+newString1);
+                localizacao.setText("Localização:\n"+newString2);
+                n.setText("Quem cadastrou:\n"+nome);
+                e.setText("Contato:\n"+email);
 
 
                 descricao.setAllCaps(true);

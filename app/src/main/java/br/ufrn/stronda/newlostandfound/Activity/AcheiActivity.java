@@ -1,58 +1,59 @@
-package br.ufrn.stronda.newlostandfound;
+package br.ufrn.stronda.newlostandfound.Activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Comment;
 
 import java.io.ByteArrayOutputStream;
 
+import br.ufrn.stronda.newlostandfound.Model.AcheiObjeto;
+import br.ufrn.stronda.newlostandfound.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AcheiActivity extends AppCompatActivity {
+public class AcheiActivity extends AppCompatActivity implements OnMapReadyCallback {
     Spinner catspn,locspn;
     EditText descricao;
+    EditText nomeObjeto;
     Button confirmar;
     AcheiObjeto acheiObjeto;
     byte[] data1;
     private DatabaseReference mDatabase;
+
+    private GoogleMap maps;
+    LatLng clicado;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_achei);
 
         //Associando os elementos da tela a variáveis na classe
+        nomeObjeto = (EditText) findViewById(R.id.nomeA);
         descricao = (EditText) findViewById(R.id.descricaoA);
         confirmar = (Button) findViewById(R.id.acheiconfimarBtn);
         catspn = (Spinner) findViewById(R.id.acheicategoriaSpn);
         locspn = (Spinner) findViewById(R.id.acheilocalizacaoSpn);
 
+        clicado = new LatLng(0,0);
 
         //Criando um arrayadapter para dispor os elementos no spinner de categoria
         ArrayAdapter adaptercat = ArrayAdapter.createFromResource(this, R.array.itens, R.layout.spinner_item);
@@ -85,14 +86,18 @@ public class AcheiActivity extends AppCompatActivity {
             confirmar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
-                    mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
-                    //chama a função para cadastrar no banco
-                    novoObjeto(descricao.getText().toString(),catspn.getSelectedItem().toString() ,locspn.getSelectedItem().toString(),userid,user.getDisplayName(),user.getEmail());
+                    if(clicado.latitude == 0 && clicado.longitude == 0) {
+                        Toast.makeText(getBaseContext(), "Por favor, marque a posição no mapa", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
+                        mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
+                        //chama a função para cadastrar no banco
+                        novoObjeto(nomeObjeto.getText().toString(),descricao.getText().toString(), catspn.getSelectedItem().toString(), locspn.getSelectedItem().toString(), userid, user.getDisplayName(), user.getEmail());
 
-                    //após cadastrar, gera um toast para informar que foi cadastrado no banco
-                    Toast.makeText(getBaseContext(),"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
-                    finish();
+                        //após cadastrar, gera um toast para informar que foi cadastrado no banco
+                        Toast.makeText(getBaseContext(), "Cadastrado com sucesso", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
                 }
             });
 
@@ -100,6 +105,33 @@ public class AcheiActivity extends AppCompatActivity {
         else {
             Log.d("google", "onAuthStateChanged:signed_out");
         }
+
+        SupportMapFragment mapFragmentA = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapaAchei);
+        mapFragmentA.getMapAsync(this);
+
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        maps = googleMap;
+        maps.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        LatLng reitoria = new LatLng(-5.8396243,-35.2020049);
+
+        maps.moveCamera(CameraUpdateFactory.newLatLngZoom(reitoria, 15));
+
+        maps.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+                // Coloca o marcador e salva a posição
+                maps.clear();
+                maps.addMarker(new MarkerOptions().position(point));
+                clicado = point;
+                //Toast.makeText(getBaseContext(),clicado.latitude + " " + clicado.longitude,Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -134,9 +166,9 @@ public class AcheiActivity extends AppCompatActivity {
 
 
     //É chamada apenas para cadastrar um objeto no banco.
-    private void novoObjeto(String descricao, String categoria,String localizacao,String userId,String nome, String email) {
+    private void novoObjeto(String nomeDoObjeto,String descricao, String categoria,String localizacao,String userId,String nome, String email) {
         String id = mDatabase.child("Usuarios").child(userId).child("Objetos").child("Achados").push().getKey();
-        AcheiObjeto acheiObjeto = new AcheiObjeto(descricao,categoria,localizacao,nome,email,id);
+        AcheiObjeto acheiObjeto = new AcheiObjeto(nomeDoObjeto,descricao,categoria,localizacao,nome,email,clicado.latitude,clicado.longitude,id);
         //"setValue" coloca o valor que está no parâmetro, dentro do banco.
 
         mDatabase.child("Usuarios").child(userId).child("Objetos").child("Achados").child(id).setValue(acheiObjeto);

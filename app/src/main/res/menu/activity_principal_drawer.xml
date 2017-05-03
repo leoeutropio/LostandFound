@@ -8,9 +8,21 @@
             android:title="Perfil"
             />
         <item
+            android:id="@+id/nav_achei"
+            android:icon="@drawable/found"
+            android:title="Achei um objeto" />
+        <item
+            android:id="@+id/nav_perdi"
+            android:icon="@drawable/lost"
+            android:title="Perdi um objeto" />
+        <item
+            android:id="@+id/nav_listagem"
+            android:icon="@drawable/sea"
+            android:title="Listar todos objetos" />
+        <item
             android:id="@+id/nav_objetos"
             android:icon="@drawable/books"
-            android:title="Objetos cadastrados" />
+            android:title="Seus Objetos cadastrados" />
         <item
             android:id="@+id/nav_configuracoes"
             android:icon="@drawable/settings"
@@ -19,6 +31,10 @@
             android:id="@+id/nav_sobre"
             android:icon="@drawable/information"
             android:title="Sobre" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/exit"
+            android:title="Logout" />
 
     </group>
 

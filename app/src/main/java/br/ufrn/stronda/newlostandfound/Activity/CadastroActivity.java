@@ -1,4 +1,4 @@
-package br.ufrn.stronda.newlostandfound;
+package br.ufrn.stronda.newlostandfound.Activity;
 
 
 import android.support.design.widget.Snackbar;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import br.ufrn.stronda.newlostandfound.R;
 
 
 public class CadastroActivity extends AppCompatActivity {

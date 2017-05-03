@@ -1,7 +1,9 @@
-package br.ufrn.stronda.newlostandfound;
+package br.ufrn.stronda.newlostandfound.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import br.ufrn.stronda.newlostandfound.R;
 
 //APENAS UMA ACTIVITY PRA EXIBIR INFORMAÇÕES DOS CRIADORES DO APLICATIVO
 

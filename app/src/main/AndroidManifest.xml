@@ -25,7 +25,7 @@
         android:label="Lost and Found"
         android:supportsRtl="true">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,51 +46,51 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".Activity.MapsActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AcheiActivity"
+            android:name=".Activity.AcheiActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PerdiActivity"
+            android:name=".Activity.PerdiActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ListagemActivity"
+            android:name=".Activity.ListagemActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CadastroActivity"
+            android:name=".Activity.CadastroActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ObjetoActivity"
+            android:name=".Activity.ObjetoActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SobreActivity"
+            android:name=".Activity.SobreActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PrincipalActivity"
+            android:name=".Activity.PrincipalActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ObjetosCadastradosActivity"
+            android:name=".Activity.ObjetosCadastradosActivity"
             android:label="Objetos cadastrados"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".PerfilActivity"
+            android:name=".Activity.PerfilActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".TelefoneActivity"
+            android:name=".Activity.TelefoneActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".RemoverObjetosActivity"
+            android:name=".Activity.RemoverObjetosActivity"
             android:label=" "
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

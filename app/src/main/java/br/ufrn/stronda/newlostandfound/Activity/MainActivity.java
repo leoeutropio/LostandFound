@@ -1,15 +1,11 @@
-package br.ufrn.stronda.newlostandfound;
+package br.ufrn.stronda.newlostandfound.Activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -25,6 +21,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import br.ufrn.stronda.newlostandfound.R;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -111,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Login google
     private void signIn() {
+        System.out.println("teste click");
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -118,12 +117,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("teste result");
         super.onActivityResult(requestCode, resultCode, data);
 
 
         //Login google
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            Log.d("google", "handleSignInResult:" + result.getStatus().toString());
             handleSignInResult(result);
         }
     }

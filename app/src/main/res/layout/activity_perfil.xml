@@ -9,7 +9,7 @@
     android:paddingBottom="20dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    tools:context="br.ufrn.stronda.newlostandfound.PerfilActivity"
+    tools:context="br.ufrn.stronda.newlostandfound.Activity.PerfilActivity"
     >
 
     <de.hdodenhof.circleimageview.CircleImageView

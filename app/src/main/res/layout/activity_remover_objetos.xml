@@ -7,7 +7,7 @@
     android:background="@color/colorbg"
     android:paddingBottom="10dp"
     android:paddingRight="10dp"
-    tools:context="br.ufrn.stronda.newlostandfound.RemoverObjetosActivity">
+    tools:context="br.ufrn.stronda.newlostandfound.Activity.RemoverObjetosActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="200dp"

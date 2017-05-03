@@ -7,7 +7,7 @@
     android:paddingBottom="20dp"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    tools:context="br.ufrn.stronda.newlostandfound.TelefoneActivity"
+    tools:context="br.ufrn.stronda.newlostandfound.Activity.TelefoneActivity"
     android:background="@color/colorbg">
 
     <TextView

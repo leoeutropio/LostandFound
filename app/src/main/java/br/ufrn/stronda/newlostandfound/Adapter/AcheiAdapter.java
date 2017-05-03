@@ -1,34 +1,30 @@
-package br.ufrn.stronda.newlostandfound;
+package br.ufrn.stronda.newlostandfound.Adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
+import br.ufrn.stronda.newlostandfound.Model.AcheiObjeto;
+import br.ufrn.stronda.newlostandfound.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by STRONDA on 22/11/2016.
+ * Created by STRONDA on 04/11/2016.
+ *
+ * Classe feita para modificar o listview para exibir mais do que só um texto, pode-se
+ * adicionar imagens e outros EditText's
  */
 
-public class PerdiAdapter extends ArrayAdapter<PerdiObjeto> {
+public class AcheiAdapter extends ArrayAdapter<AcheiObjeto> {
     private final Context context;
-    private final ArrayList<PerdiObjeto> elementos;
+    private final ArrayList<AcheiObjeto> elementos;
 
-    public PerdiAdapter(Context context, ArrayList<PerdiObjeto> elemento) {
+    public AcheiAdapter(Context context, ArrayList<AcheiObjeto> elemento) {
         super(context, R.layout.objdes,elemento);
         this.context = context;
         this.elementos= elemento;
@@ -40,21 +36,17 @@ public class PerdiAdapter extends ArrayAdapter<PerdiObjeto> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = inflater.inflate(R.layout.objdes,parent,false);
 
-        TextView descricaoTxt = (TextView) rowView.findViewById(R.id.descTxt);
+        TextView nomeObjetoTxt = (TextView) rowView.findViewById(R.id.descTxt);
         TextView localizacaoTxt = (TextView) rowView.findViewById(R.id.catTxt);
         TextView categoriaTxt = (TextView) rowView.findViewById(R.id.locTxt);
         CircleImageView imagem = (CircleImageView) rowView.findViewById(R.id.imgobj);
 
-        descricaoTxt.setText(elementos.get(position).getDescricao());
+        imagem.setImageResource(R.drawable.general);
+        nomeObjetoTxt.setText(elementos.get(position).getNomeDoObjeto());
         localizacaoTxt.setText(elementos.get(position).getCategoria());
         categoriaTxt.setText(elementos.get(position).getLocalizacao());
 
-        Glide.with(context).load(elementos.get(position).getImagem()).into(imagem);
-
-
-
         return rowView;
     }
-
 
 }

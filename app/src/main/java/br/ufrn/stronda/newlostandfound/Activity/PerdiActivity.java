@@ -1,8 +1,6 @@
-package br.ufrn.stronda.newlostandfound;
+package br.ufrn.stronda.newlostandfound.Activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,19 +9,21 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,16 +34,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-
+import br.ufrn.stronda.newlostandfound.Model.PerdiObjeto;
+import br.ufrn.stronda.newlostandfound.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.R.attr.bitmap;
-
-public class PerdiActivity extends AppCompatActivity {
+public class PerdiActivity extends AppCompatActivity implements OnMapReadyCallback {
     Spinner pcatspn,plocspn;
     EditText descricao;
+    EditText nomeObjeto;
     Button confirmar;
 
     private DatabaseReference mDatabase;
@@ -54,16 +52,19 @@ public class PerdiActivity extends AppCompatActivity {
     String idPerdido;
     byte[] data1;
 
+    private GoogleMap maps;
+    LatLng clicado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perdi);
 
-
+        clicado = new LatLng(0,0);
 
         //Associando os elementos da tela a variáveis na classe
         descricao = (EditText) findViewById(R.id.descricaoP);
+        nomeObjeto = (EditText) findViewById(R.id.nomeP);
         confirmar = (Button) findViewById(R.id.pokBtn);
         pcatspn = (Spinner) findViewById(R.id.perdicategoriaSpn);
         plocspn = (Spinner) findViewById(R.id.perdilocalizacaoSpn);
@@ -84,11 +85,35 @@ public class PerdiActivity extends AppCompatActivity {
         storageRef = storage.getReference();
         //storageRef= storage.getReferenceFromUrl("gs://achados-e-perdidos-5f077.appspot.com/");
 
-
+        SupportMapFragment mapFragmentA = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapaPerdi);
+        mapFragmentA.getMapAsync(this);
 
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        maps = googleMap;
+        maps.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        LatLng reitoria = new LatLng(-5.8396243,-35.2020049);
+
+        maps.moveCamera(CameraUpdateFactory.newLatLngZoom(reitoria, 15));
+
+        maps.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+                // Coloca o marcador e salva a posição
+                maps.clear();
+                maps.addMarker(new MarkerOptions().position(point));
+                clicado = point;
+                //Toast.makeText(getBaseContext(),clicado.latitude + " " + clicado.longitude,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
     //Função para escolher uma imagem a partir da galeria do celular
     public void pegafoto(View view) {
@@ -136,23 +161,26 @@ public class PerdiActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(View view) {
-                        mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
-                        mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
+                        if(clicado.latitude == 0 && clicado.longitude == 0) {
+                            Toast.makeText(getBaseContext(), "Por favor, marque a posição no mapa", Toast.LENGTH_SHORT).show();
+                        } else {
+                            mDatabase.child("Usuarios").child(userid).child("nome").setValue(name);
+                            mDatabase.child("Usuarios").child(userid).child("email").setValue(email);
 
-                        storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).putFile(imagemSelecionada).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        novoObjeto(descricao.getText().toString(),pcatspn.getSelectedItem().toString() ,plocspn.getSelectedItem().toString(),userid,uri.toString(),user.getDisplayName(),user.getEmail());
-                                        Toast.makeText(PerdiActivity.this,"Cadastrado com sucesso",Toast.LENGTH_SHORT).show();
-                                        finish();
-                                    }
-                                });
-                            }
-                        });
-
+                            storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).putFile(imagemSelecionada).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                    storageRef.child("Usuarios").child(userid).child("Objetos").child("Perdidos").child(idPerdido).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            novoObjeto(nomeObjeto.getText().toString(), descricao.getText().toString(), pcatspn.getSelectedItem().toString(), plocspn.getSelectedItem().toString(), userid, uri.toString(), user.getDisplayName(), user.getEmail());
+                                            Toast.makeText(PerdiActivity.this, "Cadastrado com sucesso", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    });
+                                }
+                            });
+                        }
 
                     }
                 });
@@ -184,8 +212,8 @@ public class PerdiActivity extends AppCompatActivity {
     }
 
     //É chamada apenas para cadastrar um objeto no banco.
-    private void novoObjeto(String descricao, String categoria,String localizacao,String userId, String imagem,String nome, String email) {
-        PerdiObjeto perdiObjeto = new PerdiObjeto(descricao,categoria,localizacao,imagem,nome,email,idPerdido);
+    private void novoObjeto(String nomeDoObjeto, String descricao, String categoria,String localizacao,String userId, String imagem,String nome, String email) {
+        PerdiObjeto perdiObjeto = new PerdiObjeto(nomeDoObjeto,descricao,categoria,localizacao,imagem,nome,email,clicado.latitude,clicado.longitude,idPerdido);
         //"setValue" coloca o valor que está no parâmetro, dentro do banco.
         mDatabase.child("Usuarios").child(userId).child("Objetos").child("Perdidos").child(idPerdido).setValue(perdiObjeto);
     }
